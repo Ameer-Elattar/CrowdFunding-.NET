@@ -1,8 +1,9 @@
 ﻿namespace Crowd_Funding.Models
 {
-    public class Status
+    public enum Status
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
+        Active = 1,
+        Completed = 2,
+        Cancelled = 3
     }
 }

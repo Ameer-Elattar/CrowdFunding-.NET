@@ -4,7 +4,6 @@ namespace Crowd_Funding.Models
 {
     public class ProjectTag
     {
-        public int Id { get; set; }
         [ForeignKey("Project")]
         public int ProjectID { get; set; }
         [ForeignKey("Tag")]
