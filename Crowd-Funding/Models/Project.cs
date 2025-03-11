@@ -30,11 +30,12 @@ namespace Crowd_Funding.Models
         public ApplicationUser? User { get; set; }
 
 
-        public List<ProjectTag>? ProjectTags { get; set; }
+        public List<Tag>? Tags { get; set; }
         public List<Donation>? Donations { get; set; }
         public List<Rate>? Rates { get; set; }
         public List<Report>? Reports { get; set; }
         public List<Comment>? Comments { get; set; }
+        public List<ProjectPics>? ImagePaths { get; set; }
 
 
 

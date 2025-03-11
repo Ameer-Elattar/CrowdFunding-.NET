@@ -1,3 +1,4 @@
+using Crowd_Funding.Repositories.Generic;
 using Crowd_Funding.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +16,10 @@ namespace Crowd_Funding
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
+
+            //builder.Services.AddControllers().ConfigureApiBehaviorOptions(
+            //    options => options.SuppressModelStateInvalidFilter = true);
+
             builder.Services.AddDbContext<CrowdFundingContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DBConnection"));
@@ -30,7 +35,7 @@ namespace Crowd_Funding
 
             })
                 .AddEntityFrameworkStores<CrowdFundingContext>();
-
+            builder.Services.AddHttpContextAccessor();
 
             builder.Services.AddAuthentication(options =>
             {
@@ -55,9 +60,23 @@ namespace Crowd_Funding
 
 
             builder.Services.AddScoped<IProjectRepository, ProjectRepository>();
+            builder.Services.AddScoped<IProjectPicsRepository, ProjectPicsRepository>();
+            builder.Services.AddScoped<IDonationRepository, DonationRepository>();
+            builder.Services.AddScoped<IRateRepository, RateRepository>();
+            builder.Services.AddScoped<IReportRepository, ReportRepository>();
+            builder.Services.AddScoped<ICommentReportRepository, CommentReportRepository>();
+            builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
             builder.Services.AddScoped<CategoryService>();
             builder.Services.AddScoped<ProjectService>();
+            builder.Services.AddScoped<DonationService>();
+            builder.Services.AddScoped<TagService>();
+            builder.Services.AddScoped<RateService>();
+            builder.Services.AddScoped<ReportService>();
+            builder.Services.AddScoped<CommentReportService>();
+            builder.Services.AddScoped<CommentService>();
+            builder.Services.AddScoped<FileService>();
+
 
 
             builder.Services.AddControllers();
@@ -78,7 +97,7 @@ namespace Crowd_Funding
                 {
                     Version = "v1",
                     Title = "ASP.NET 8 Web API",
-                    Description = " ITI Projrcy"
+                    Description = " ITI Projrct"
                 });
                 // To Enable authorization using Swagger (JWT)    
                 swagger.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme()

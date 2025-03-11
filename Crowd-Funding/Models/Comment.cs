@@ -17,7 +17,7 @@ namespace Crowd_Funding.Models
 
 
         [ForeignKey("Project")]
-        public int ProjectID { get; set; }
+        public int? ProjectID { get; set; }
         public Project? Project { get; set; }
         public List<CommentReport>? CommentReports { get; set; }
 

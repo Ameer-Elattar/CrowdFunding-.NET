@@ -278,19 +278,29 @@ namespace Crowd_Funding.Migrations
                     b.ToTable("Projects");
                 });
 
-            modelBuilder.Entity("Crowd_Funding.Models.ProjectTag", b =>
+            modelBuilder.Entity("Crowd_Funding.Models.ProjectPics", b =>
                 {
-                    b.Property<int>("ProjectID")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    b.Property<int>("TagID")
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<bool>("IsMain")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("PicPath")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProjectId")
                         .HasColumnType("int");
 
-                    b.HasKey("ProjectID", "TagID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("TagID");
+                    b.HasIndex("ProjectId");
 
-                    b.ToTable("ProjectTags");
+                    b.ToTable("ProjectPics");
                 });
 
             modelBuilder.Entity("Crowd_Funding.Models.Rate", b =>
@@ -469,6 +479,21 @@ namespace Crowd_Funding.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("ProjectTag", b =>
+                {
+                    b.Property<int>("ProjectsId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TagsId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ProjectsId", "TagsId");
+
+                    b.HasIndex("TagsId");
+
+                    b.ToTable("ProjectTag");
+                });
+
             modelBuilder.Entity("Crowd_Funding.Models.Comment", b =>
                 {
                     b.HasOne("Crowd_Funding.Models.Project", "Project")
@@ -545,23 +570,15 @@ namespace Crowd_Funding.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Crowd_Funding.Models.ProjectTag", b =>
+            modelBuilder.Entity("Crowd_Funding.Models.ProjectPics", b =>
                 {
                     b.HasOne("Crowd_Funding.Models.Project", "Project")
-                        .WithMany("ProjectTags")
-                        .HasForeignKey("ProjectID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Crowd_Funding.Models.Tag", "Tag")
-                        .WithMany("ProjectTags")
-                        .HasForeignKey("TagID")
+                        .WithMany("ImagePaths")
+                        .HasForeignKey("ProjectId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Project");
-
-                    b.Navigation("Tag");
                 });
 
             modelBuilder.Entity("Crowd_Funding.Models.Rate", b =>
@@ -653,6 +670,21 @@ namespace Crowd_Funding.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("ProjectTag", b =>
+                {
+                    b.HasOne("Crowd_Funding.Models.Project", null)
+                        .WithMany()
+                        .HasForeignKey("ProjectsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Crowd_Funding.Models.Tag", null)
+                        .WithMany()
+                        .HasForeignKey("TagsId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
             modelBuilder.Entity("Crowd_Funding.Models.ApplicationUser", b =>
                 {
                     b.Navigation("CommentReports");
@@ -684,16 +716,11 @@ namespace Crowd_Funding.Migrations
 
                     b.Navigation("Donations");
 
-                    b.Navigation("ProjectTags");
+                    b.Navigation("ImagePaths");
 
                     b.Navigation("Rates");
 
                     b.Navigation("Reports");
-                });
-
-            modelBuilder.Entity("Crowd_Funding.Models.Tag", b =>
-                {
-                    b.Navigation("ProjectTags");
                 });
 #pragma warning restore 612, 618
         }

@@ -1,4 +1,4 @@
-﻿using Crowd_Funding.DTO.Category;
+﻿using Crowd_Funding.DTO;
 using Crowd_Funding.Services;
 using Microsoft.AspNetCore.Mvc;
 
@@ -43,7 +43,7 @@ namespace Crowd_Funding.Controllers
 
         }
         [HttpPut]
-        public async Task<IActionResult> UpdateCategory(GetCategoryDTO categoryFromRequest)
+        public async Task<IActionResult> UpdateCategory(CategoryResponseDTO categoryFromRequest)
         {
             if (!ModelState.IsValid)
             {

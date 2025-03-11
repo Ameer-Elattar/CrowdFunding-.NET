@@ -1,6 +1,6 @@
-﻿using Crowd_Funding.DTO.Category;
+﻿using Crowd_Funding.DTO;
 using Crowd_Funding.Models;
-using Crowd_Funding.Repositories;
+using Crowd_Funding.Repositories.Generic;
 
 namespace Crowd_Funding.Services
 {
@@ -12,14 +12,14 @@ namespace Crowd_Funding.Services
         {
             CategoryRepo = _categoryRepo;
         }
-        public async Task<IEnumerable<GetCategoryDTO>> GetAllCategoriesAsync()
+        public async Task<IEnumerable<CategoryResponseDTO>> GetAllCategoriesAsync()
         {
             var categories = await CategoryRepo.GetAllAsync();
 
-            var categoriesDTO = new List<GetCategoryDTO>();
+            var categoriesDTO = new List<CategoryResponseDTO>();
             foreach (var item in categories)
             {
-                categoriesDTO.Add(new GetCategoryDTO
+                categoriesDTO.Add(new CategoryResponseDTO
                 {
                     Id = item.Id,
                     Name = item.Name,
@@ -29,12 +29,12 @@ namespace Crowd_Funding.Services
             return categoriesDTO;
         }
 
-        public async Task<GetCategoryDTO> GetCategoryByIdAsync(int id)
+        public async Task<CategoryResponseDTO> GetCategoryByIdAsync(int id)
         {
             var category = await CategoryRepo.GetByIdAsync(id);
             if (category == null) return null;
 
-            return new GetCategoryDTO()
+            return new CategoryResponseDTO()
             {
                 Id = category.Id,
                 Name = category.Name,
@@ -52,7 +52,7 @@ namespace Crowd_Funding.Services
             await CategoryRepo.SaveAsync();
             return category;
         }
-        public async Task UpdateCategoryAsync(GetCategoryDTO categoryFromRequest)
+        public async Task UpdateCategoryAsync(CategoryResponseDTO categoryFromRequest)
         {
             var category = new Category()
             {

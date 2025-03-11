@@ -1,5 +1,4 @@
-﻿using Crowd_Funding.DTO.Project;
-using Crowd_Funding.Services;
+﻿using Crowd_Funding.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Crowd_Funding.Controllers
@@ -19,18 +18,26 @@ namespace Crowd_Funding.Controllers
         {
             return Ok(projectService.GetAllProjects());
         }
+        [HttpGet("full/{id:int}")]
+        public IActionResult GetProjectfullData(int id)
+        {
+            var project = projectService.GetProjectFullDataAsync(id);
+            if (project == null) return NotFound(new { message = "Project Not Found" });
+            return Ok(project);
+        }
         [HttpGet("{id:int}")]
+
         public async Task<IActionResult> GetByID(int id)
         {
             var project = await projectService.GetProjectByID(id);
-            if (project == null) return NotFound("Project Not Found");
+            if (project == null) return NotFound(new { message = "Project Not Found" });
             return Ok(project);
         }
         [HttpPost]
         public async Task<IActionResult> AddProject(AddProjectDTO project)
         {
             var projectAdded = await projectService.AddProject(project);
-            return CreatedAtAction(nameof(GetByID), new { id = projectAdded.Id }, projectAdded);
+            return Created();
         }
         [HttpPut]
         public async Task<IActionResult> UpdateProject(UpdateProjectDTO project)
@@ -38,7 +45,7 @@ namespace Crowd_Funding.Controllers
             bool isUpdeted = await projectService.UpdateProject(project);
             if (!isUpdeted)
             {
-                return NotFound("Project Not Found");
+                return NotFound(new { message = "Project Not Found" });
             }
             return Ok(new { message = "Project Updated" });
         }
@@ -48,7 +55,7 @@ namespace Crowd_Funding.Controllers
             bool isDeleted = await projectService.DeleteProject(id);
             if (!isDeleted)
             {
-                return NotFound("Project Not Found");
+                return NotFound(new { message = "Project Not Found" });
             }
             return Ok(new { message = "Project Deleted" });
         }
